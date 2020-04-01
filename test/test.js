@@ -126,6 +126,24 @@ test({
 		let contents = await river.concat(merged)
 
 		assert_buffer(contents, 'Your heart, deep within everything you experience, is stronger than the deepest mountain, larger than the most expansive galaxy.Your heart, deep within everything you experience, is stronger than the deepest mountain, larger than the most expansive galaxy.')
+	}, pull: async () => {
+		let example_data = 'Your heart, deep within everything you experience, is stronger than the deepest mountain, larger than the most expansive galaxy.'.split(' ')
+
+		let read = fs.createReadStream('example-data.txt')
+		
+		let brooks = river.pipeline(
+			read,
+			river.split(' '))
+		
+		for (let word of example_data) {
+			assert_buffer(await river.pull(brooks), word)
+		}
+		try {
+			await river.pull(brooks)
+			throw new Error("End of stream not detected")
+		} catch (error) {
+			assert_string(error.message, "End of stream")
+		}
 	}
 })
 

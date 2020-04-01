@@ -57,4 +57,4 @@ module.exports.parallel = (concurrency, each) => {
 }
 module.exports.split = require('node-binary-split')
 module.exports.merge = require('merge2')
-
+module.exports.pull = require('stream-shift-promise')

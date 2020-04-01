@@ -1,6 +1,6 @@
 # mississippi-promise
 
-This module is based off of [`require('mississippi')`](https://www.npmjs.com/package/mississippi), but offers the contents with promises instead of callbacks, and adds [split](#split) and [merge](#merge).  Like the Mississippi river, this collects together useful streaming into one location.
+This module is based off of [`require('mississippi')`](https://www.npmjs.com/package/mississippi), but offers the contents with promises instead of callbacks, and adds [split](#split), [merge](#merge), and [pull](#pull).  Like the Mississippi river, this collects together useful streaming into one location.
 
 Learn how each part of Mississippi works, and then work with the ones you are most drawn to, while holding understanding
 of the rest.  Draw from this forever flowing source of utilities, and be deeply nourished.
@@ -28,6 +28,7 @@ const river = require('mississippi-promise')
 - [parallel](#parallel)
 - [split](#split)
 - [merge](#merge)
+- [pull](#pull)
 
 ### pipe
 
@@ -456,6 +457,24 @@ Passing an array of stream will merge them in parallel.  Otherwise parameters ar
 //   2. merge `stream2` and `stream3` in parallel after `stream1` merged;
 //   3. merge 'stream4' after `stream2` and `stream3` merged;
 const stream = merge2(stream1, [stream2, stream3], stream4)
+```
+
+### pull
+
+#### `let part = await river.pull(stream)`
+
+Resolves a promise to the next buffer or object in a stream's
+readable queue.  Rejects if there is an error or the stream
+is closed.
+
+#### original module
+
+`river.pull` is provided by [ require('stream-shift-promise') ](https://www.npmjs.com/package/stream-shift-promise) which is a promise wrapper around [ require('stream-shift') ](https://www.npmjs.com/package/stream-shift)
+
+#### example
+
+```js
+console.log(await river.pull(stream)) // first item from stream
 ```
 
 ## see also
