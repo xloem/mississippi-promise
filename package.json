@@ -1,0 +1,26 @@
+{
+  "name": "mississippi-promise",
+  "version": "1.0.0",
+  "description": "a collection of useful streams, promisified",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test/test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xloem/mississippi-promise.git"
+  },
+  "author": "Karl Semich <0xloem@gmail.com>",
+  "license": "BSD-2-Clause",
+  "bugs": {
+    "url": "https://github.com/xloem/mississippi-promise/issues"
+  },
+  "homepage": "https://github.com/xloem/mississippi-promise#readme",
+  "dependencies": {
+    "mississippi": "^4.0.0",
+    "through2-promise": "^1.1.2"
+  },
+  "devDependencies": {
+    "node-binary-split": "^1.0.4"
+  }
+}
