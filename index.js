@@ -44,14 +44,17 @@ module.exports.to.obj = (options, write, flush) => {
 }
 module.exports.concat = (...streams) => {
 	return new Promise((resolve, reject) => {
-		miss.pipe(...streams, miss.concat(resolve), callback)
-		function callback(error)
-		{
-			if (error) { reject(error) }
-		}
+		miss.pipe(
+			...streams,
+			miss.concat(resolve),
+			(error) => (error && reject(error))
+		)
 	})
 }
 module.exports.finished = util.promisify(miss.finished)
 module.exports.parallel = (concurrency, each) => {
 	return miss.parallel(concurrency, util.callbackify(each))
 }
+module.exports.split = require('node-binary-split')
+module.exports.merge = require('merge2')
+
