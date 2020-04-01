@@ -71,6 +71,19 @@ test({
 		assert_contents('test-data.txt', 'Your heart, deep within everything you experience, is stronger than the deepest mountain, larger than the most expansive galaxy.')
 
 		fs.unlinkSync('test-data.txt')
+	}, from_obj: async () => {
+		let strings = fs.readFileSync('example-data.txt').toString('binary').split(' ')
+		let stream = river.from.obj(async () => {
+			if (strings.length <= 0) { return null }
+
+			return { for_real: strings.shift() }
+		})
+		let string = ''
+		await river.each(stream, async (data) => {
+			string += data.for_real + ' '
+		})
+
+		assert_string(string, 'Your heart, deep within everything you experience, is stronger than the deepest mountain, larger than the most expansive galaxy. ')
 	}, to: async () => {
 		let read = fs.createReadStream('example-data.txt')
 		let write = fs.createWriteStream('test-data.txt')
@@ -87,6 +100,33 @@ test({
 			})
 
 		await river.pipe(read, stream)
+
+		assert_contents('test-data.txt', 'Your heart, deep within everything you experience, is stronger than the deepest mountain, larger than the most expansive galaxy. For real!')
+
+		fs.unlinkSync('test-data.txt')
+	}, to_obj: async () => {
+		let strings = fs.readFileSync('example-data.txt').toString('binary').split(' ')
+		let write = fs.createWriteStream('test-data.txt')
+
+		let upstream = river.from.obj(async () => {
+			if (strings.length <= 0) { return null }
+
+			return { for_real: strings.shift() }
+		})
+
+		let stream = river.to.obj(
+			async (data) =>
+			{
+				write.write(data.for_real)
+				write.write(' ')
+			}, async () =>
+			{
+				write.write('For real!')
+				write.end()
+				await river.finished(write)
+			})
+
+		await river.pipe(upstream, stream)
 
 		assert_contents('test-data.txt', 'Your heart, deep within everything you experience, is stronger than the deepest mountain, larger than the most expansive galaxy. For real!')
 

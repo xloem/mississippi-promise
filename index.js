@@ -21,7 +21,7 @@ module.exports.from.obj = (options, read) => {
 		read = options
 		options = {}
 	}
-	if (!isArray(read) && read) {
+	if (!Array.isArray(read) && read) {
 		read = util.callbackify(read)
 	}
 	return miss.from.obj(options, read)
